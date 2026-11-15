@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("app.cash.paparazzi") version "1.3.5"
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
 }

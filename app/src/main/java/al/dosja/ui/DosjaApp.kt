@@ -42,7 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DosjaApp(vm: DosjaViewModel = viewModel()) {
-    MaterialTheme {
+    MaterialTheme(colorScheme = androidx.compose.material3.lightColorScheme()) {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -72,7 +72,7 @@ fun DosjaApp(vm: DosjaViewModel = viewModel()) {
 }
 
 @Composable
-private fun DocumentList(docs: List<CaseDoc>, policyLine: String, onOpen: (CaseDoc) -> Unit) {
+internal fun DocumentList(docs: List<CaseDoc>, policyLine: String, onOpen: (CaseDoc) -> Unit) {
     Column(Modifier.fillMaxSize().padding(16.dp)) {
         Text("Case documents", style = MaterialTheme.typography.titleMedium)
         Text(
@@ -147,7 +147,7 @@ private fun DocumentDetail(vm: DosjaViewModel, doc: CaseDoc) {
 }
 
 @Composable
-private fun ResultCard(outcome: Outcome) {
+internal fun ResultCard(outcome: Outcome) {
     val (label, colour) = when (outcome.source) {
         Source.ON_DEVICE -> "ON-DEVICE" to Color(0xFF1B5E20)
         Source.CLOUD -> "CLOUD (with consent)" to Color(0xFF0D47A1)
@@ -175,7 +175,7 @@ private fun ResultCard(outcome: Outcome) {
 }
 
 @Composable
-private fun ConsentDialog(state: ScreenState.Consent, onSend: () -> Unit, onStay: () -> Unit) {
+internal fun ConsentDialog(state: ScreenState.Consent, onSend: () -> Unit, onStay: () -> Unit) {
     val why = when (state.reason) {
         ConsentReason.TOO_LONG_FOR_DEVICE ->
             "This document is ${state.chars} characters — longer than the on-device limit. The on-device model did not read it."

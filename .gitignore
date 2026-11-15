@@ -10,3 +10,4 @@ captures/
 *.apk
 *.aab
 google-services.json
+!docs/demo/*.mp4
