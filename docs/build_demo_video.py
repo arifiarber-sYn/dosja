@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the Dosja demo video from Paparazzi renders + espeak narration."""
+"""Build the Dosja demo video from Paparazzi renders + neural TTS narration (edge-tts)."""
 import json
 import pathlib
 import subprocess
@@ -106,6 +106,21 @@ SCENES = [
 ]
 
 
+VOICE = "en-US-BrianNeural"
+
+
+def synth(text, out_path):
+    """Neural TTS through edge-tts (Microsoft Read Aloud voices, free endpoints)."""
+    import asyncio
+    import edge_tts
+
+    async def _go():
+        comm = edge_tts.Communicate(text, VOICE, rate="+4%")
+        await comm.save(str(out_path))
+
+    asyncio.run(_go())
+
+
 def run(cmd):
     p = subprocess.run(cmd, capture_output=True, text=True)
     if p.returncode != 0:
@@ -126,9 +141,9 @@ def esc(text):
 
 scene_files = []
 for i, sc in enumerate(SCENES):
-    wav = WORK / f"{i:02d}.wav"
-    run(["espeak-ng", "-v", "en-us", "-s", "148", "-p", "35", "-w", str(wav), sc["narration"]])
-    dur = dur_of(wav) + 0.9
+    wav = WORK / f"{i:02d}.mp3"
+    synth(sc["narration"], wav)
+    dur = dur_of(wav) + 0.7
 
     # text files for drawtext (avoids shell escaping)
     for name, body in (("head", sc["headline"]), ("body", "\n".join(sc["bullets"]))):
